@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService } from '../auth.service';
+
+import * as fromApp from 'app/store/app.reducers';
+import * as AuthActions from 'app/auth/store/auth.actions';
+
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-signup',
@@ -9,7 +13,7 @@ import { AuthService } from '../auth.service';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
   }
@@ -17,6 +21,6 @@ export class SignupComponent implements OnInit {
   onSignup(form: NgForm) {
     const email = form.value.email;
     const password = form.value.password;
-    this.authService.signupUser(email, password);
+    this.store.dispatch(new AuthActions.TrySignup({username: email, password: password}));
   }
 }
